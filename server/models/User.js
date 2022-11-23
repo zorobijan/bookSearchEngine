@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-
+const bcrypt = require('bcrypt');
+//reference activity 21
 const bookSchema = require('./Book')
 
 const userSchema = new Schema({
@@ -24,6 +25,16 @@ const userSchema = new Schema({
   },
 });
 
-const Matchup = model('Matchup', matchupSchema);
+// set up pre-save middleware to create password
+userSchema.pre('save', async function (next) {
+  if (this.isNew || this.isModified('password')) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
 
-module.exports = Matchup;
+  next();
+});
+
+const User = model('User', userSchema);
+
+module.exports = User;

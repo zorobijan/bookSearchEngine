@@ -1,4 +1,8 @@
-const { Tech, Matchup } = require('../models');
+const { User, Book } = require('../models');
+//reference activity 21
+const { AuthenticationError } = require('apollo-server-express');
+const { signToken } = require('../utils/auth');
+
 
 const resolvers = {
   Query: {
