@@ -1,25 +1,38 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-  type Profile {
+  type User {
     _id: ID
-    tech1: String
-    tech2: String
-    tech1_votes: String
-    tech2_votes: [String]!
+    username: String
+    email: String
+    password: String
+    bookCount: Int
+    savedBooks: [Book]
+  }
+
+  type Auth {
+    token: ID!
+    profile: Profile
   }
 
   type Query {
-    getAllMatchups: [Matchup]
-    getMatchup(id: ID!): Matchup
-    getAllTech: [Tech]
-    # Because we have the context functionality in place to check a JWT and decode its data, we can use a query that will always find and return the logged in user's data
-    me: Matchup
+    me: User
   }
 
   type Mutation {
-    createMatchup(tech1:String!, tech2:String!):Matchup
-    createVote(techNum:String!, id:ID!):Matchup
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    saveBook(book: Book): User
+    removeSkill(bookID: String!): User
+  }
+
+  type Book {
+    _id: ID!
+    authors: String
+    description: String
+    title: String
+    image: String
+    link: String
   }
 `;
 
